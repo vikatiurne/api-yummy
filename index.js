@@ -15,7 +15,8 @@ const app = express();
 app.use(
   cors({
     credentials: true,
-    origin: process.env.CLIENT_URL,
+    origin: "https://boisterous-wisp-fccde4.netlify.app/",
+    // origin: process.env.CLIENT_URL,
   })
 );
 app.use(express.json());
