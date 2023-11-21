@@ -53,7 +53,8 @@ class GoogleAuthController {
       httpOnly: true,
       secure: false,
     });
-    res.redirect(process.env.CLIENT_URL);
+    res.redirect("https://boisterous-wisp-fccde4.netlify.app");
+    // res.redirect(process.env.CLIENT_URL);
   }
 
   async getCurentGoogleUser(req, res) {
