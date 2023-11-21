@@ -29,7 +29,8 @@ class GoogleAuthController {
         code,
         clientId: process.env.GOOGLE_CLIENT_ID,
         clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-        redirectUri: `${process.env.API_URL}/api/user/auth/google`,
+        redirectUri: `https://api-yummy.onrender.com/api/user/auth/google`,
+        // redirectUri: `${process.env.API_URL}/api/user/auth/google`,
       }
     );
     const googleUser = await axios
