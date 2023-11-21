@@ -14,8 +14,7 @@ const PORT = process.env.PORT || 5000;
 const app = express();
 app.use(
   cors({
-    credentials: false,
-    // credentials: true,
+    credentials: true,
     origin: "https://boisterous-wisp-fccde4.netlify.app",
     // origin: process.env.CLIENT_URL,
   })
