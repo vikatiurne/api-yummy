@@ -7,11 +7,6 @@ class GoogleAuthController {
   getGoogleOAuthUrl() {
     const oAuthServerEndpoint = 'https://accounts.google.com/o/oauth2/v2/auth';
     const queryParams = {
-      // prod:
-      // client_id: "1073086270333-c5h4tukvqvdtcd28cl6j8qvf9d7lnmfh.apps.googleusercontent.com",
-      // redirect_uri: `https://api-yummy.onrender.com/api/user/auth/google`,
-
-      // local:
       client_id: process.env.GOOGLE_CLIENT_ID,
       redirect_uri: `${process.env.API_URL}/api/user/auth/google`,
       response_type: 'code',
@@ -32,12 +27,6 @@ class GoogleAuthController {
     const { id_token, access_token } = await googleOAuthService.getGoogleTokens(
       {
         code,
-        // prod:
-        // clientId: "1073086270333-c5h4tukvqvdtcd28cl6j8qvf9d7lnmfh.apps.googleusercontent.com",
-        // clientSecret: "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",
-        // redirectUri: `https://api-yummy.onrender.com/api/user/auth/google`,
-
-        // local:
         clientId: process.env.GOOGLE_CLIENT_ID,
         clientSecret: process.env.GOOGLE_CLIENT_SECRET,
         redirectUri: `${process.env.API_URL}/api/user/auth/google`,
@@ -55,7 +44,7 @@ class GoogleAuthController {
       .then((res) => res.data)
       .catch((error) => {
         console.error(`Не вдалося отримати данні користувача`);
-        throw new Error(error.message);
+        // throw new Error(error.message);
       });
     const tokens = tokenService.generateTokens(googleUser);
     res.cookie('refreshToken', tokens.refreshToken, {
@@ -63,7 +52,6 @@ class GoogleAuthController {
       httpOnly: true,
       secure: false,
     });
-    // res.redirect(`https://boisterous-wisp-fccde4.netlify.app`);
     res.redirect(process.env.CLIENT_URL);
   }
 
