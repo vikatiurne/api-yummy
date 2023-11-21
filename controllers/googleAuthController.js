@@ -8,7 +8,8 @@ class GoogleAuthController {
     const oAuthServerEndpoint = 'https://accounts.google.com/o/oauth2/v2/auth';
     const queryParams = {
       client_id: process.env.GOOGLE_CLIENT_ID,
-      redirect_uri: `${process.env.API_URL}/api/user/auth/google`,
+      redirect_uri: `https://api-yummy.onrender.com/api/user/auth/google`,
+      // redirect_uri: `${process.env.API_URL}/api/user/auth/google`,
       response_type: 'code',
       access_type: 'offline',
       scope: [
@@ -53,7 +54,7 @@ class GoogleAuthController {
       httpOnly: true,
       secure: false,
     });
-    res.redirect("https://boisterous-wisp-fccde4.netlify.app");
+    res.redirect('https://boisterous-wisp-fccde4.netlify.app');
     // res.redirect(process.env.CLIENT_URL);
   }
 
@@ -63,7 +64,11 @@ class GoogleAuthController {
       const userData = tokenService.validateRefreshToken(refreshToken);
       const email = await userData.email;
       const name = await userData.name;
-      const user = await googleOAuthService.registration(email, name,refreshToken);
+      const user = await googleOAuthService.registration(
+        email,
+        name,
+        refreshToken
+      );
       return await res.json(user);
     }
   }
