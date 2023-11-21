@@ -7,8 +7,12 @@ class GoogleAuthController {
   getGoogleOAuthUrl() {
     const oAuthServerEndpoint = 'https://accounts.google.com/o/oauth2/v2/auth';
     const queryParams = {
-      client_id: process.env.GOOGLE_CLIENT_ID,
+      // prod:
+      client_id: "1073086270333-c5h4tukvqvdtcd28cl6j8qvf9d7lnmfh.apps.googleusercontent.com",
       redirect_uri: `https://api-yummy.onrender.com/api/user/auth/google`,
+
+      // local:
+      // client_id: process.env.GOOGLE_CLIENT_ID,
       // redirect_uri: `${process.env.API_URL}/api/user/auth/google`,
       response_type: 'code',
       access_type: 'offline',
