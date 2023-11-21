@@ -44,6 +44,7 @@ class GoogleAuthController {
       .then((res) => res.data)
       .catch((error) => {
         console.error(`Не вдалося отримати данні користувача`);
+        next(err);
         // throw new Error(error.message);
       });
     const tokens = tokenService.generateTokens(googleUser);
