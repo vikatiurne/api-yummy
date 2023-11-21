@@ -16,7 +16,7 @@ app.use(
   cors({
     credentials: false,
     // credentials: true,
-    origin: "*",
+    origin: "https://boisterous-wisp-fccde4.netlify.app/",
     // origin: process.env.CLIENT_URL,
   })
 );
