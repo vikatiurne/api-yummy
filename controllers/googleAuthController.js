@@ -22,17 +22,16 @@ class GoogleAuthController {
   }
 
   async getGoogleUser(req, res, next) {
+    const { code } = req.query;
+
     try {
-      const { code } = req.query;
-  
-      const { id_token, access_token } = await googleOAuthService.getGoogleTokens(
-        {
+      const { id_token, access_token } =
+        await googleOAuthService.getGoogleTokens({
           code,
           clientId: process.env.GOOGLE_CLIENT_ID,
           clientSecret: process.env.GOOGLE_CLIENT_SECRET,
           redirectUri: `${process.env.API_URL}/api/user/auth/google`,
-        }
-      );
+        });
       const googleUser = await axios
         .get(
           `https://www.googleapis.com/oauth2/v1/userinfo?alt=json&access_token=${access_token}`,
