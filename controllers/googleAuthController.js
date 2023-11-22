@@ -21,7 +21,7 @@ class GoogleAuthController {
     return `${oAuthServerEndpoint}?${qs.toString()}`;
   }
 
-  async getGoogleUser(req, res) {
+  async getGoogleUser(req, res,next) {
     const { code } = req.query;
 
     const { id_token, access_token } = await googleOAuthService.getGoogleTokens(
@@ -50,7 +50,8 @@ class GoogleAuthController {
       });
     } catch (error) {
       console.log(`Не вдалося отримати данні користувача`);
-      throw new Error(error.message);
+      next(error);
+      // throw new Error(error.message);
     }
     // const googleUser = await axios
     //   .get(
