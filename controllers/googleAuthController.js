@@ -32,29 +32,8 @@ class GoogleAuthController {
         redirectUri: `${process.env.API_URL}/api/user/auth/google`,
       }
     );
-    try {
-      const googleUser = await axios.get(
-        `https://www.googleapis.com/oauth2/v1/userinfo?alt=json&access_token=${access_token}`,
-        {
-          headers: {
-            Authorization: `Bearer ${id_token}`,
-          },
-        }
-      )
-      .then((res) => res.data)
-      const tokens = tokenService.generateTokens(googleUser);
-      res.cookie('refreshToken', tokens.refreshToken, {
-        maxAge: 30 * 24 * 60 * 60 * 1000,
-        httpOnly: true,
-        secure: false,
-      });
-    } catch (error) {
-      console.log(`Не вдалося отримати данні користувача`);
-      next(error);
-      // throw new Error(error.message);
-    }
-    // const googleUser = await axios
-    //   .get(
+    // try {
+    //   const googleUser = await axios.get(
     //     `https://www.googleapis.com/oauth2/v1/userinfo?alt=json&access_token=${access_token}`,
     //     {
     //       headers: {
@@ -63,33 +42,59 @@ class GoogleAuthController {
     //     }
     //   )
     //   .then((res) => res.data)
-    //   .catch((error) => {
-    //     console.log(`Не вдалося отримати данні користувача`);
-    //     next(err);
-    //     // throw new Error(error.message);
+    //   const tokens = tokenService.generateTokens(googleUser);
+    //   res.cookie('refreshToken', tokens.refreshToken, {
+    //     maxAge: 30 * 24 * 60 * 60 * 1000,
+    //     httpOnly: true,
+    //     secure: false,
     //   });
-    // const tokens = tokenService.generateTokens(googleUser);
-    // res.cookie('refreshToken', tokens.refreshToken, {
-    //   maxAge: 30 * 24 * 60 * 60 * 1000,
-    //   httpOnly: true,
-    //   secure: false,
-    // });
+    // } catch (error) {
+    //   console.log(`Не вдалося отримати данні користувача`);
+    //   next(error);
+    //   // throw new Error(error.message);
+    // }
+    const googleUser = await axios
+      .get(
+        `https://www.googleapis.com/oauth2/v1/userinfo?alt=json&access_token=${access_token}`,
+        {
+          headers: {
+            Authorization: `Bearer ${id_token}`,
+          },
+        }
+      )
+      .then((res) => res.data)
+      .catch((error) => {
+        console.log(`Не вдалося отримати данні користувача`);
+        next(err);
+        // throw new Error(error.message);
+      });
+    const tokens = tokenService.generateTokens(googleUser);
+    res.cookie('refreshToken', tokens.refreshToken, {
+      maxAge: 30 * 24 * 60 * 60 * 1000,
+      httpOnly: true,
+      secure: false,
+    });
     res.redirect(process.env.CLIENT_URL);
   }
 
-  async getCurentGoogleUser(req, res) {
-    const refreshToken = await req.cookies['refreshToken'];
-    if (refreshToken) {
-      const userData = tokenService.validateRefreshToken(refreshToken);
-      const email = await userData.email;
-      const name = await userData.name;
-      const user = await googleOAuthService.registration(
-        email,
-        name,
-        refreshToken
-      );
-      return await res.json(user);
+  async getCurentGoogleUser(req, res, next) {
+    try {
+      const refreshToken = await req.cookies['refreshToken'];
+      if (refreshToken) {
+        const userData = tokenService.validateRefreshToken(refreshToken);
+        const email = await userData.email;
+        const name = await userData.name;
+        const user = await googleOAuthService.registration(
+          email,
+          name,
+          refreshToken
+        );
+        return await res.json(user);
+      }
+    } catch (error) {
+      next(error)
     }
+
   }
 }
 
