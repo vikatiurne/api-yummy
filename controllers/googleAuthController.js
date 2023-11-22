@@ -48,6 +48,7 @@ class GoogleAuthController {
         httpOnly: true,
         secure: false,
       });
+      res.redirect(process.env.CLIENT_URL);
     } catch (error) {
       console.log(`Не вдалося отримати данні користувача`);
       next(error);
@@ -74,7 +75,7 @@ class GoogleAuthController {
     //   httpOnly: true,
     //   secure: false,
     // });
-    res.redirect(process.env.CLIENT_URL);
+    // res.redirect(process.env.CLIENT_URL);
   }
 
   async getCurentGoogleUser(req, res, next) {
