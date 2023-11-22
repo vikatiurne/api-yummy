@@ -21,10 +21,10 @@ class GoogleAuthController {
     return `${oAuthServerEndpoint}?${qs.toString()}`;
   }
 
-   getGoogleUser(req, res,next) {
+  async getGoogleUser(req, res, next) {
     const { code } = req.query;
 
-    const { id_token, access_token } =  googleOAuthService.getGoogleTokens(
+    const { id_token, access_token } = await googleOAuthService.getGoogleTokens(
       {
         code,
         clientId: process.env.GOOGLE_CLIENT_ID,
@@ -32,28 +32,49 @@ class GoogleAuthController {
         redirectUri: `${process.env.API_URL}/api/user/auth/google`,
       }
     );
-    
-    const googleUser =  axios
-      .get(
-        `https://www.googleapis.com/oauth2/v1/userinfo?alt=json&access_token=${access_token}`,
-        {
-          headers: {
-            Authorization: `Bearer ${id_token}`,
-          },
-        }
-      )
-      .then((res) => res.data)
-      .catch((error) => {
-        console.log(`Не вдалося отримати данні користувача`);
-        next(err);
-        // throw new Error(error.message);
+    try {
+      const googleUser = await axios
+        .get(
+          `https://www.googleapis.com/oauth2/v1/userinfo?alt=json&access_token=${access_token}`,
+          {
+            headers: {
+              Authorization: `Bearer ${id_token}`,
+            },
+          }
+        )
+        .then((res) => res.data);
+      const tokens = tokenService.generateTokens(googleUser);
+      res.cookie('refreshToken', tokens.refreshToken, {
+        maxAge: 30 * 24 * 60 * 60 * 1000,
+        httpOnly: true,
+        secure: false,
       });
-    const tokens = tokenService.generateTokens(googleUser);
-    res.cookie('refreshToken', tokens.refreshToken, {
-      maxAge: 30 * 24 * 60 * 60 * 1000,
-      httpOnly: true,
-      secure: false,
-    });
+    } catch (error) {
+      console.log(`Не вдалося отримати данні користувача`);
+      next(error);
+      // throw new Error(error.message);
+    }
+    // const googleUser = await axios
+    //   .get(
+    //     `https://www.googleapis.com/oauth2/v1/userinfo?alt=json&access_token=${access_token}`,
+    //     {
+    //       headers: {
+    //         Authorization: `Bearer ${id_token}`,
+    //       },
+    //     }
+    //   )
+    //   .then((res) => res.data)
+    //   .catch((error) => {
+    //     console.log(`Не вдалося отримати данні користувача`);
+    //     next(err);
+    //     // throw new Error(error.message);
+    //   });
+    // const tokens = tokenService.generateTokens(googleUser);
+    // res.cookie('refreshToken', tokens.refreshToken, {
+    //   maxAge: 30 * 24 * 60 * 60 * 1000,
+    //   httpOnly: true,
+    //   secure: false,
+    // });
     res.redirect(process.env.CLIENT_URL);
   }
 
@@ -72,9 +93,8 @@ class GoogleAuthController {
         return await res.json(user);
       }
     } catch (error) {
-      next(error)
+      next(error);
     }
-
   }
 }
 
