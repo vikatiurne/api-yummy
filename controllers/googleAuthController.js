@@ -40,7 +40,8 @@ class GoogleAuthController {
             Authorization: `Bearer ${id_token}`,
           },
         }
-      );
+      )
+      .then((res) => res.data)
       const tokens = tokenService.generateTokens(googleUser);
       res.cookie('refreshToken', tokens.refreshToken, {
         maxAge: 30 * 24 * 60 * 60 * 1000,
