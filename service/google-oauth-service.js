@@ -27,7 +27,7 @@ class GoogleOAuthService {
       .then((res) => res.data)
       .catch((error) => {
         console.error(`Помилка авторизаціїї Google`);
-        throw new Error(error.message);
+        // throw new Error(error.message);
       });
     return googleData;
   }
