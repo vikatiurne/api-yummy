@@ -32,7 +32,6 @@ class GoogleAuthController {
           clientSecret: process.env.GOOGLE_CLIENT_SECRET,
           redirectUri: `${process.env.API_URL}/api/user/auth/google`,
         });
-      console.log('access_token:', access_token, 'id_token:', id_token);
       const googleUser = await axios
         .get(
           `https://www.googleapis.com/oauth2/v1/userinfo?alt=json&access_token=${access_token}`,
@@ -43,14 +42,13 @@ class GoogleAuthController {
           }
         )
         .then((res) => res.data);
-        console.log('googltUser:', googleUser)
       const tokens = tokenService.generateTokens(googleUser);
       res.cookie('refreshToken', tokens.refreshToken, {
         maxAge: 30 * 24 * 60 * 60 * 1000,
         httpOnly: true,
         secure: false,
       });
-      res.redirect(process.env.CLIENT_URL);
+      await res.redirect(process.env.CLIENT_URL);
     } catch (error) {
       console.log(`Не вдалося отримати данні користувача`);
       next(error);
