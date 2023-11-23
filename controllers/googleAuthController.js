@@ -48,7 +48,7 @@ class GoogleAuthController {
         httpOnly: true,
         secure: false,
       });
-      localStorage.setItem('token', tokens.accessToken);
+      localeStorage.setItem('token', tokens.accessToken);
       await res.redirect(process.env.CLIENT_URL);
     } catch (error) {
       console.log(`Не вдалося отримати данні користувача`);
