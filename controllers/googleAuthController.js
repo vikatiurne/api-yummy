@@ -23,6 +23,51 @@ class GoogleAuthController {
 
   async getGoogleUser(req, res, next) {
     try {
+      // const { code } = req.query;
+
+      // const { id_token, access_token } =
+      //   await googleOAuthService.getGoogleTokens({
+      //     code,
+      //     clientId: process.env.GOOGLE_CLIENT_ID,
+      //     clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+      //     redirectUri: `${process.env.API_URL}/api/user/auth/google`,
+      //   });
+      // const googleUser = await axios
+      //   .get(
+      //     `https://www.googleapis.com/oauth2/v1/userinfo?alt=json&access_token=${access_token}`,
+      //     {
+      //       headers: {
+      //         Authorization: `Bearer ${id_token}`,
+      //       },
+      //     }
+      //   )
+      //   .then((res) => res.data);
+      // const tokens = tokenService.generateTokens(googleUser);
+      // console.log(
+      //   'ID-TOKEN:',
+      //   id_token,
+      //   'ACCESS-TOKEN:',
+      //   access_token,
+      //   'GOOGLEUSER:',
+      //   googleUser,
+      //   'TOKENS:',
+      //   tokens
+      // );
+      // await res.cookie('refreshToken', tokens.refreshToken, {
+      //   maxAge: 30 * 24 * 60 * 60 * 1000,
+      //   httpOnly: true,
+      //   secure: false,
+      // });
+      await res.redirect(process.env.CLIENT_URL);
+    } catch (error) {
+      console.log(`Не вдалося отримати данні користувача`);
+      next(error);
+      // throw new Error(error.message);
+    }
+  }
+
+  async getCurentGoogleUser(req, res, next) {
+    try {
       const { code } = req.query;
 
       const { id_token, access_token } =
@@ -58,16 +103,7 @@ class GoogleAuthController {
         httpOnly: true,
         secure: false,
       });
-      await res.redirect(process.env.CLIENT_URL);
-    } catch (error) {
-      console.log(`Не вдалося отримати данні користувача`);
-      next(error);
-      // throw new Error(error.message);
-    }
-  }
 
-  async getCurentGoogleUser(req, res, next) {
-    try {
       const refreshToken = await req.cookies['refreshToken'];
       if (refreshToken) {
         const userData = tokenService.validateRefreshToken(refreshToken);
