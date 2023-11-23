@@ -3,6 +3,7 @@ import express from 'express';
 
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
+import bodyParser from 'body-parser';
 import fileUpload from 'express-fileupload';
 import sequelize from './bd.js';
 
@@ -20,6 +21,7 @@ app.use(
 );
 app.use(express.json());
 app.use(cookieParser(process.env.SECRET_KEY));
+app.use(bodyParser.json())
 app.use(express.static('static'));
 app.use(fileUpload({}));
 app.use('/api', router);

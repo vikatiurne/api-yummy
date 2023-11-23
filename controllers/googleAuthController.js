@@ -22,9 +22,9 @@ class GoogleAuthController {
   }
 
   async getGoogleUser(req, res, next) {
-    
     try {
       const { code } = req.query;
+
       const { id_token, access_token } =
         await googleOAuthService.getGoogleTokens({
           code,
@@ -32,6 +32,7 @@ class GoogleAuthController {
           clientSecret: process.env.GOOGLE_CLIENT_SECRET,
           redirectUri: `${process.env.API_URL}/api/user/auth/google`,
         });
+      console.log('id-token:', id_token);
       const googleUser = await axios
         .get(
           `https://www.googleapis.com/oauth2/v1/userinfo?alt=json&access_token=${access_token}`,
@@ -54,28 +55,6 @@ class GoogleAuthController {
       next(error);
       // throw new Error(error.message);
     }
-    // const googleUser = await axios
-    //   .get(
-    //     `https://www.googleapis.com/oauth2/v1/userinfo?alt=json&access_token=${access_token}`,
-    //     {
-    //       headers: {
-    //         Authorization: `Bearer ${id_token}`,
-    //       },
-    //     }
-    //   )
-    //   .then((res) => res.data)
-    //   .catch((error) => {
-    //     console.log(`Не вдалося отримати данні користувача`);
-    //     next(err);
-    //     // throw new Error(error.message);
-    //   });
-    // const tokens = tokenService.generateTokens(googleUser);
-    // res.cookie('refreshToken', tokens.refreshToken, {
-    //   maxAge: 30 * 24 * 60 * 60 * 1000,
-    //   httpOnly: true,
-    //   secure: false,
-    // });
-    // res.redirect(process.env.CLIENT_URL);
   }
 
   async getCurentGoogleUser(req, res, next) {
