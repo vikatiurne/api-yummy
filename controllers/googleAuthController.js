@@ -32,7 +32,7 @@ class GoogleAuthController {
           clientSecret: process.env.GOOGLE_CLIENT_SECRET,
           redirectUri: `${process.env.API_URL}/api/user/auth/google`,
         });
-      console.log('id-token:', id_token);
+      console.log('access_token:', access_token);
       const googleUser = await axios
         .get(
           `https://www.googleapis.com/oauth2/v1/userinfo?alt=json&access_token=${access_token}`,
