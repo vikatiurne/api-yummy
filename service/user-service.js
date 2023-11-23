@@ -96,6 +96,7 @@ class UserService {
 
   async getUser(token) {
     const tokenData = await tokenService.findAccessToken(token);
+    console.log(tokenData)
     const user = await User.findByPk(tokenData.userId);
     const userDto = new UserDto(user);
     return userDto;
