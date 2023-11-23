@@ -43,21 +43,12 @@ class GoogleAuthController {
         )
         .then((res) => res.data);
       const tokens = tokenService.generateTokens(googleUser);
-      console.log(
-        'ID-TOKEN:',
-        id_token,
-        'ACCESS-TOKEN:',
-        access_token,
-        'GOOGLEUSER:',
-        googleUser,
-        'TOKENS:',
-        tokens
-      );
-      await res.cookie('refreshToken', tokens.refreshToken, {
+      res.cookie('refreshToken', tokens.refreshToken, {
         maxAge: 30 * 24 * 60 * 60 * 1000,
         httpOnly: true,
         secure: false,
       });
+      localStorage.setItem('token', tokens.accessToken);
       await res.redirect(process.env.CLIENT_URL);
     } catch (error) {
       console.log(`Не вдалося отримати данні користувача`);
