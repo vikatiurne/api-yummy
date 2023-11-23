@@ -68,6 +68,8 @@ class GoogleAuthController {
           name,
           refreshToken
         );
+        const result = await res.json(user)
+        console.log("USER:",result )
         return await res.json(user);
       }
     } catch (error) {
