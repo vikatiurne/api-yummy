@@ -22,9 +22,9 @@ class GoogleAuthController {
   }
 
   async getGoogleUser(req, res, next) {
-    const { code } = req.query;
-
+    
     try {
+      const { code } = req.query;
       const { id_token, access_token } =
         await googleOAuthService.getGoogleTokens({
           code,
