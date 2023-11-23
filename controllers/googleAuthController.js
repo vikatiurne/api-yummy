@@ -43,7 +43,7 @@ class GoogleAuthController {
         )
         .then((res) => res.data);
       const tokens = tokenService.generateTokens(googleUser);
-      res.cookie('refreshToken', tokens.refreshToken, {
+      await res.cookie('refreshToken', tokens.refreshToken, {
         maxAge: 30 * 24 * 60 * 60 * 1000,
         httpOnly: true,
         secure: false,
