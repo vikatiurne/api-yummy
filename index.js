@@ -2,6 +2,7 @@ import 'dotenv/config';
 import express from 'express';
 
 import cors from 'cors';
+// import cookies from 'cookies';
 import cookieParser from 'cookie-parser';
 import bodyParser from 'body-parser';
 import fileUpload from 'express-fileupload';
@@ -13,6 +14,7 @@ import errorHandler from './middleware/ErrorHandlingMiddleware.js';
 const PORT = process.env.PORT || 5000;
 
 const app = express();
+app.use(cookies())
 app.use(
   cors({
     credentials: true,

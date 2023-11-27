@@ -63,7 +63,7 @@ class GoogleAuthController {
 
   async getCurentGoogleUser(req, res, next) {
     try {
-      const cook = await req.cookies
+      const cook = await req.cookie
       const refreshToken = await req.cookies['refreshToken'];
       console.log('RT:', cook);
       if (refreshToken) {
