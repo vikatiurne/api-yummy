@@ -24,6 +24,7 @@ class GoogleOAuthService {
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',
         },
+        credentials: "include",
       })
       .then((res) => res.data)
       .catch((error) => {
