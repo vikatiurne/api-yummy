@@ -49,7 +49,7 @@ class GoogleAuthController {
         httpOnly: true,
         // secure: false,
         secure: true,
-        sameSite: none,
+        sameSite: "none",
       });
       await res.redirect(process.env.CLIENT_URL);
     } catch (error) {
