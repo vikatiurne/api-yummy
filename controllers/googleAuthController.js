@@ -23,6 +23,7 @@ class GoogleAuthController {
 
   async getGoogleUser(req, res, next) {
     try {
+      console.log(req.query);
       const { code } = req.query;
 
       const { id_token, access_token } =
@@ -59,7 +60,7 @@ class GoogleAuthController {
   async getCurentGoogleUser(req, res, next) {
     try {
       const refreshToken = await req.cookies['refreshToken'];
-      console.log("RT:",req.cookies)
+      console.log('RT:', req.cookies);
       if (refreshToken) {
         const userData = tokenService.validateRefreshToken(refreshToken);
         const email = await userData.email;
@@ -69,8 +70,8 @@ class GoogleAuthController {
           name,
           refreshToken
         );
-        const result = await res.json(user)
-        console.log("USER:",result )
+        const result = await res.json(user);
+        console.log('USER:', result);
         return await res.json(user);
       }
     } catch (error) {
