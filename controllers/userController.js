@@ -38,6 +38,8 @@ class UserController {
       res.cookie('refreshToken', userData.refreshToken, {
         maxAge: 30 * 24 * 60 * 60 * 1000,
         httpOnly: true,
+        secure: true,
+        sameSite: "none",
       });
       return res.json(userData);
     } catch (error) {
@@ -49,7 +51,6 @@ class UserController {
       const { refreshToken } = req.cookies;
       const token = await userService.logout(refreshToken);
       res.clearCookie('refreshToken');
-      // res.clearCookie('basketId');
       return res.json(token);
     } catch (error) {
       next(error);

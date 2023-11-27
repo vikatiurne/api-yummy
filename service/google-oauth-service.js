@@ -20,18 +20,15 @@ class GoogleOAuthService {
 
     const googleData = axios
       .post(url, querystring.stringify(values), {
-        // withCredentials: true,
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',
         },
-        // credentials: "include",
       })
       .then((res) => res.data)
       .catch((error) => {
         console.error(`Помилка авторизаціїї Google`);
-        throw new Error(error.message);
+        next(error);
       });
-      console.log("post_data:", googleData)
     return googleData;
   }
 

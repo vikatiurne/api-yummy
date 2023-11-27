@@ -42,12 +42,11 @@ class GoogleAuthController {
           }
         )
         .then((res) => res.data);
-      console.log('googleUser:', googleUser);
+        
       const tokens = tokenService.generateTokens(googleUser);
       res.cookie('refreshToken', tokens.refreshToken, {
         maxAge: 30 * 24 * 60 * 60 * 1000,
         httpOnly: true,
-        // secure: false,
         secure: true,
         sameSite: "none",
       });
@@ -55,7 +54,6 @@ class GoogleAuthController {
     } catch (error) {
       console.log(`Не вдалося отримати данні користувача`);
       next(error);
-      // throw new Error(error.message);
     }
   }
 
@@ -73,8 +71,6 @@ class GoogleAuthController {
           name,
           refreshToken
         );
-        const result = await res.json(user);
-        console.log('USER:', result);
         return await res.json(user);
       }
     } catch (error) {
