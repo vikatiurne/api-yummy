@@ -20,11 +20,11 @@ class GoogleOAuthService {
 
     const googleData = axios
       .post(url, querystring.stringify(values), {
-        withCredentials: true,
+        // withCredentials: true,
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',
         },
-        credentials: "include",
+        // credentials: "include",
       })
       .then((res) => res.data)
       .catch((error) => {
