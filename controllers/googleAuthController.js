@@ -23,7 +23,6 @@ class GoogleAuthController {
 
   async getGoogleUser(req, res, next) {
     try {
-      
       const { code } = req.query;
 
       const { id_token, access_token } =
@@ -33,7 +32,7 @@ class GoogleAuthController {
           clientSecret: process.env.GOOGLE_CLIENT_SECRET,
           redirectUri: `${process.env.API_URL}/api/user/auth/google`,
         });
-        const googleUser = await axios
+      const googleUser = await axios
         .get(
           `https://www.googleapis.com/oauth2/v1/userinfo?alt=json&access_token=${access_token}`,
           {
@@ -41,14 +40,16 @@ class GoogleAuthController {
               Authorization: `Bearer ${id_token}`,
             },
           }
-          )
-          .then((res) => res.data);
-          console.log("googleUser:",googleUser);
+        )
+        .then((res) => res.data);
+      console.log('googleUser:', googleUser);
       const tokens = tokenService.generateTokens(googleUser);
       res.cookie('refreshToken', tokens.refreshToken, {
         maxAge: 30 * 24 * 60 * 60 * 1000,
         httpOnly: true,
-        secure: false,
+        // secure: false,
+        secure: true,
+        sameSite: none,
       });
       await res.redirect(process.env.CLIENT_URL);
     } catch (error) {
@@ -60,7 +61,7 @@ class GoogleAuthController {
 
   async getCurentGoogleUser(req, res, next) {
     try {
-      const cook = await req.cookies
+      const cook = await req.cookies;
       const refreshToken = await req.cookies['refreshToken'];
       console.log('RT:', cook);
       if (refreshToken) {
