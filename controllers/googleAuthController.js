@@ -29,15 +29,14 @@ class GoogleAuthController {
       const { id_token, access_token } =
         await googleOAuthService.getGoogleTokens({
           code,
-          clientId: "1073086270333-c5h4tukvqvdtcd28cl6j8qvf9d7lnmfh.apps.googleusercontent.com",
-          clientSecret: "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",
-          redirectUri: `https://api-yummy.onrender.com/api/user/auth/google`,
-          // clientId: process.env.GOOGLE_CLIENT_ID,
-          // clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-          // redirectUri: `${process.env.API_URL}/api/user/auth/google`,
+          // clientId: "1073086270333-c5h4tukvqvdtcd28cl6j8qvf9d7lnmfh.apps.googleusercontent.com",
+          // clientSecret: "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",
+          // redirectUri: `https://api-yummy.onrender.com/api/user/auth/google`,
+          clientId: process.env.GOOGLE_CLIENT_ID,
+          clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+          redirectUri: `${process.env.API_URL}/api/user/auth/google`,
         });
-        console.log(access_token);
-      const googleUser = await axios
+        const googleUser = await axios
         .get(
           `https://www.googleapis.com/oauth2/v1/userinfo?alt=json&access_token=${access_token}`,
           {
@@ -45,8 +44,9 @@ class GoogleAuthController {
               Authorization: `Bearer ${id_token}`,
             },
           }
-        )
-        .then((res) => res.data);
+          )
+          .then((res) => res.data);
+          console.log("googleUser:",googleUser);
       const tokens = tokenService.generateTokens(googleUser);
       res.cookie('refreshToken', tokens.refreshToken, {
         maxAge: 30 * 24 * 60 * 60 * 1000,
@@ -63,8 +63,9 @@ class GoogleAuthController {
 
   async getCurentGoogleUser(req, res, next) {
     try {
+      const cook = await req.cookies
       const refreshToken = await req.cookies['refreshToken'];
-      console.log('RT:', req.cookies);
+      console.log('RT:', cook);
       if (refreshToken) {
         const userData = tokenService.validateRefreshToken(refreshToken);
         const email = await userData.email;
