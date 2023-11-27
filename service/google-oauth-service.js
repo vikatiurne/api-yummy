@@ -31,6 +31,7 @@ class GoogleOAuthService {
         console.error(`Помилка авторизаціїї Google`);
         throw new Error(error.message);
       });
+      console.log("post_data:", googleData)
     return googleData;
   }
 
