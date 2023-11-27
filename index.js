@@ -14,7 +14,7 @@ import errorHandler from './middleware/ErrorHandlingMiddleware.js';
 const PORT = process.env.PORT || 5000;
 
 const app = express();
-app.use(cookies())
+// app.use(cookies())
 app.use(
   cors({
     credentials: true,
