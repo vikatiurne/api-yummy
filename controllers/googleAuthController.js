@@ -23,16 +23,20 @@ class GoogleAuthController {
 
   async getGoogleUser(req, res, next) {
     try {
-      console.log(req.query);
+      
       const { code } = req.query;
 
       const { id_token, access_token } =
         await googleOAuthService.getGoogleTokens({
           code,
-          clientId: process.env.GOOGLE_CLIENT_ID,
-          clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-          redirectUri: `${process.env.API_URL}/api/user/auth/google`,
+          clientId: "1073086270333-c5h4tukvqvdtcd28cl6j8qvf9d7lnmfh.apps.googleusercontent.com",
+          clientSecret: "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",
+          redirectUri: `https://api-yummy.onrender.com/api/user/auth/google`,
+          // clientId: process.env.GOOGLE_CLIENT_ID,
+          // clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+          // redirectUri: `${process.env.API_URL}/api/user/auth/google`,
         });
+        console.log(access_token);
       const googleUser = await axios
         .get(
           `https://www.googleapis.com/oauth2/v1/userinfo?alt=json&access_token=${access_token}`,
