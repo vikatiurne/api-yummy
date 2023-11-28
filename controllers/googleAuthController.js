@@ -60,6 +60,7 @@ class GoogleAuthController {
   async getCurentGoogleUser(req, res, next) {
     try {
       const refreshToken = await req.cookies['refreshToken'];
+      console.log(refreshToken)
       if (refreshToken) {
         const userData = tokenService.validateRefreshToken(refreshToken);
         const email = await userData.email;
