@@ -17,7 +17,12 @@ class BasketController {
         const { userId } = req.query;
         basket = await basketService.create(userId);
       }
-      res.cookie('basketId', basket.id, { maxAge, signed });
+      res.cookie('basketId', basket.id, {
+        maxAge,
+        signed,
+        secure: true,
+        sameSite: 'none',
+      });
       res.json(basket);
     } catch (error) {
       next(error);
@@ -38,7 +43,12 @@ class BasketController {
       const { prodactId } = req.params;
       const { qty } = req.body.params;
       const basket = await basketService.append(basketId, prodactId, qty);
-      res.cookie('basketId', basket.id, { maxAge, signed });
+      res.cookie('basketId', basket.id, {
+        maxAge,
+        signed,
+        secure: true,
+        sameSite: 'none',
+      });
       res.json(basket);
     } catch (error) {
       next(error);
@@ -50,7 +60,12 @@ class BasketController {
       const { prodactId } = req.params;
       let basketId = parseInt(req.signedCookies.basketId);
       const basket = await basketService.increment(basketId, prodactId);
-      res.cookie('basketId', basket.id, { maxAge, signed });
+      res.cookie('basketId', basket.id, {
+        maxAge,
+        signed,
+        secure: true,
+        sameSite: 'none',
+      });
       res.json(basket);
     } catch (error) {
       next(error);
@@ -66,13 +81,18 @@ class BasketController {
         prodactId,
         minOrder
       );
-      res.cookie('basketId', basket.id, { maxAge, signed });
+      res.cookie('basketId', basket.id, {
+        maxAge,
+        signed,
+        secure: true,
+        sameSite: 'none',
+      });
       res.json(basket);
     } catch (error) {
       next(error);
     }
   }
- 
+
   async remove(req, res, next) {
     try {
       let basketId;
@@ -85,7 +105,12 @@ class BasketController {
       }
       const { prodactId } = req.params;
       const basket = await basketService.remove(basketId, prodactId);
-      res.cookie('basketId', basket.id, { maxAge, signed });
+      res.cookie('basketId', basket.id, {
+        maxAge,
+        signed,
+        secure: true,
+        sameSite: 'none',
+      });
       res.json(basket);
     } catch (error) {
       next(error);
@@ -103,7 +128,12 @@ class BasketController {
         basketId = parseInt(req.signedCookies.basketId);
       }
       const basket = await basketService.clear(basketId);
-      res.cookie('basketId', basket.id, { maxAge, signed });
+      res.cookie('basketId', basket.id, {
+        maxAge,
+        signed,
+        secure: true,
+        sameSite: 'none',
+      });
       res.json(basket);
     } catch (error) {
       next(error);
