@@ -12,7 +12,7 @@ class ProdactController {
       const { img } = req.files;
       let fileName = uuidv4() + '.jpg';
       const __dirname = path.dirname('..');
-      img.mv(path.resolve(__dirname, 'static', fileName));
+      await img.mv(path.resolve(__dirname, 'static', fileName));
 
       const prodact = await Prodact.create({
         name,
